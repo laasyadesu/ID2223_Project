@@ -2,9 +2,8 @@ name: solar-daily-dashboard
 
 on:
   workflow_dispatch:
-    
-    # schedule:
-    #   - cron: '0 6 * * *'  # every day at 6:00 UTC
+  schedule:
+      - cron: '0 6 * * *'  # every day at 6:00 UTC
 
 jobs:
   publish_dashboard:
@@ -29,6 +28,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+
       - name: Run solar notebooks
         env:
           HOPSWORKS_API_KEY: ${{ secrets.HOPSWORKS_API_KEY }}
@@ -37,6 +37,7 @@ jobs:
           jupyter nbconvert --to notebook --execute daily_feature.ipynb --inplace
           jupyter nbconvert --to notebook --execute inference_pipeline.ipynb --inplace
 
+          
       - name: Publish dashboard plots
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
